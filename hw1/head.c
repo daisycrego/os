@@ -1,13 +1,13 @@
 #include "types.h"
 #include "user.h"
 
-char* resize(char* inArr, int* size){
-    char* outArr = malloc(*(size)*2);
+char* doubleSize(char* inArr, int size){
+    int newSize = size * 2;
+    char* outArr = malloc(newSize);
     int i;
-    for (i = 0; i < *size; i++)
+    for (i = 0; i < size; i++)
       outArr[i] = inArr[i];
     free(inArr);
-    *size *= 2;
     return outArr;
 }
 
@@ -19,7 +19,7 @@ void printArr(char* arr, int size){
   return;
 }
 
-int readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
+char* readHead(int fd, int numOflines, char* buf, int* bufSize, int* bufCap){
   char temp;
   int n;
   int l = 0;
@@ -28,12 +28,14 @@ int readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
     if (temp == '\n'){
       l++;
     }
-    buf[bufSize] = temp;
-    bufSize++;
-    if (bufSize == bufCap)
-      buf = resize(buf, &bufCap);
+    buf[*bufSize] = temp;
+    (*bufSize)++;
+    if (*bufSize == *bufCap){
+      buf = doubleSize(buf, *bufSize);
+      *bufCap *= 2;
+    }
   }
-  return bufSize;
+  return buf;
 }
 
 int main(int argc, char *argv[]){
@@ -54,10 +56,11 @@ int main(int argc, char *argv[]){
     }
   }
 
-  bufSize = readHead(fd, numOflines, buf, bufSize, bufCap);
+  buf = readHead(fd, numOflines, buf, &bufSize, &bufCap);
 
   //printf(1, "start printing... \n");
   //printf(1, "bufSize: %d\n", bufSize);
+  printf(1, "main(): bufSize: %d, bufCap: %d\n", bufSize, bufCap);
   printArr(buf, bufSize);
   //printf(1, "done printing... \n");
 
