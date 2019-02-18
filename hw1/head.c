@@ -24,7 +24,7 @@ int readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
   int n;
   int l = 0;
 
-  while(((n = read(fd, &temp, 1)) > 0) && l < numOflines){
+  while((l < numOflines) && ((n = read(fd, &temp, 1)) > 0)){
     if (temp == '\n'){
       l++;
     }
