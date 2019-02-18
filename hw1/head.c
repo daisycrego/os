@@ -19,9 +19,8 @@ void printArr(char* arr, int size){
   return;
 }
 
-void readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
+int readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
   char temp;
-
   int n;
   int l = 0;
 
@@ -34,7 +33,7 @@ void readHead(int fd, int numOflines, char* buf, int bufSize, int bufCap){
     if (bufSize == bufCap)
       buf = resize(buf, &bufCap);
   }
-  return;
+  return bufSize;
 }
 
 int main(int argc, char *argv[]){
@@ -44,9 +43,6 @@ int main(int argc, char *argv[]){
   char* buf = malloc(bufCap);
   int numOflines = 10;
 	int fd;
-  char temp;
-  int l = 0;
-  int n;
 
   if (argc <= 1){ //filename NOT provided
     fd = 0;
@@ -58,7 +54,7 @@ int main(int argc, char *argv[]){
     }
   }
 
-  readHead(fd, numOflines, buf, bufSize, bufCap);
+  bufSize = readHead(fd, numOflines, buf, bufSize, bufCap);
 
   //printf(1, "start printing... \n");
   //printf(1, "bufSize: %d\n", bufSize);
