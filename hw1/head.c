@@ -39,7 +39,6 @@ char* readHead(int fd, int numOflines, char* buf, int* bufSize, int* bufCap){
 }
 
 int main(int argc, char *argv[]){
-
   int bufCap = 512;
   int bufSize = 0;
   char* buf = malloc(bufCap);
@@ -57,14 +56,7 @@ int main(int argc, char *argv[]){
   }
 
   buf = readHead(fd, numOflines, buf, &bufSize, &bufCap);
-
-  //printf(1, "start printing... \n");
-  //printf(1, "bufSize: %d\n", bufSize);
-  printf(1, "main(): bufSize: %d, bufCap: %d\n", bufSize, bufCap);
   printArr(buf, bufSize);
-  //printf(1, "done printing... \n");
-
-  //printf(1, "free buf\n");
   free(buf);
   exit();
 }
