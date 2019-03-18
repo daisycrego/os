@@ -1,0 +1,31 @@
+rm a.txt
+rm b.txt
+rm c.txt
+rm d.txt
+rm e.txt
+
+exec-only:
+1. ls
+2. head -1
+
+individual testing:
+3. ls > a.txt
+4. grep a < a.txt
+5. ls | head -1
+
+compound testing:
+6. cat /usr/share/dict/words | grep cat | sed s/cat/dog/ > doggerel.txt
+7. sort -r < a.txt > e.txt
+
+additional testing:
+8. grep con < doggerel.txt
+
+linux vs. shell.c
+1. same
+2. same
+3. same
+4. same
+5. same
+6. same
+7. same
+8. same
