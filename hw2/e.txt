@@ -1,3 +1,12 @@
-c.txt
-b.txt
+test.txt
+shell_original.c
+shell_original
+shell.pdf
+shell.c
+shell
+pipe_test.c
+pipe_test
+myfile2.txt
+myfile.txt
+doggerel.txt
 a.txt
