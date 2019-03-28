@@ -72,8 +72,8 @@ runcmd(struct cmd *cmd)
     rcmd = (struct redircmd*)cmd;
     if (fork1() == 0){
       int io = rcmd->type == '>' ? 1 : 0;
-      rcmd->mode = rcmd->type == '>' ? 006666 : rcmd->mode;
-      int fd = rcmd->type == '>' ? creat(rcmd->file, rcmd->mode) : open(rcmd->file, rcmd->mode);
+      //rcmd->mode already set to O_WRONLY|O_CREAT|O_TRUNC
+      int fd = rcmd->type == '>' ? open(rcmd->file, rcmd->mode, S_IWUSR | S_IRGRP | S_IROTH) : open(rcmd->file, rcmd->mode);
       if (fd < 0){
         fprintf(stderr, "open %s failed\n", rcmd->file);
         exit(-1);
