@@ -25,6 +25,12 @@ from the xv6 book:
 10. (pg 14) grep fork sh.c | wc -l
 11. (pg 14) echo hello world | wc
 
+from the internet:
+12. ls -la /dev | more
+13. ls -1 /dev | wc
+14. ls -la /home > listing.txt
+15. cat > atextfile.txt
+
 linux vs. shell.c
 1. same
 2. same
@@ -34,7 +40,16 @@ linux vs. shell.c
 6. same
 7. same
 8. same
-9. linux: file tmp1 is created and contains the name of the existing file and the error message for the non-existing file
-  shell: file tmp1 is created but only contains the name of the existing file //however a new file &1 is also created (empty)
+9.
+  linux: file tmp1 is created and contains the name
+of the existing file and the error message for the
+non-existing file
+  shell: file tmp1 is created but only contains the
+  name of the existing file //however a new file &1
+  is also created (but remains empty)
 10. same
 11. same
+12. same
+13. same
+14. same
+15. same

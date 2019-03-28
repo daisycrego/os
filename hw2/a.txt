@@ -1,5 +1,16 @@
+&1
 a.txt
+a_linux.txt
+a_shell.txt
+atextfile.txt
 doggerel.txt
+doggerel_linux.txt
+doggerel_shell.txt
+e.txt
+e_linux.txt
+e_shell.txt
+listing.txt
+listing_shell.txt
 myfile.txt
 myfile2.txt
 pipe_test
@@ -10,3 +21,4 @@ shell.pdf
 shell_original
 shell_original.c
 test.txt
+tmp1

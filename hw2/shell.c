@@ -70,38 +70,22 @@ runcmd(struct cmd *cmd)
   case '>':
   case '<':
     rcmd = (struct redircmd*)cmd;
-    int fd;
-    if (rcmd->type == '>'){ // redirect output
-      if (fork1() == 0){
-        // rcmd->mode already set to O_WRONLY|O_CREAT|O_TRUNC
-        // when O_CREAT is taken, write access needs to be explicitly set
-        // for user/group/other (W,R,R), so use: S_IWUSR | S_IRGRP | S_IROTH
-        fd = open(rcmd->file, rcmd->mode, S_IWUSR | S_IRGRP | S_IROTH);
-        dup2(fd,1); // write to file instead of stdout
-        close(fd);
-        runcmd(rcmd->cmd);
-        fprintf(stderr, "invalid exec call\n");
+    if (fork1() == 0){
+      int io = rcmd->type == '>' ? 1 : 0;
+      rcmd->mode = rcmd->type == '>' ? 006666 : rcmd->mode;
+      int fd = rcmd->type == '>' ? creat(rcmd->file, rcmd->mode) : open(rcmd->file, rcmd->mode);
+      if (fd < 0){
+        fprintf(stderr, "open %s failed\n", rcmd->file);
         exit(-1);
       }
-      else{
-        wait(&r);
-      }
-      exit(0);
+      dup2(fd,io);
+      close(fd);
+      runcmd(rcmd->cmd);
     }
-    else{ // redirect input
-      if (fork1() == 0){
-        fd = open(rcmd->file, rcmd->mode);
-        dup2(fd,0); // read from file instead of stdin
-        close(fd);
-        runcmd(rcmd->cmd);
-        fprintf(stderr, "invalid exec call\n");
-        exit(-1);
-      }
-      else{
-        wait(&r);
-      }
-      exit(0);
+    else {
+      wait(&r);
     }
+    exit(0);
     break;
 
   case '|':
@@ -110,23 +94,22 @@ runcmd(struct cmd *cmd)
       fprintf(stderr, "failed to create pipe\n");
       exit(-1);
     }
-
-    if (fork1() == 0){ //redirect output
-      close(p[0]); //close input to the pipe, this child won't use it
-      dup2(p[1],1); //redirect stdout to output of pipe
-      close(p[1]); //don't leave hanging fds
+    if (fork1() == 0){
+      close(p[0]);
+      dup2(p[1],1);
+      close(p[1]);
       runcmd(pcmd->left);
     }
-    if (fork1() == 0){ //redirect input
-      close(p[1]); //close output of the pipe, this child won't use it
-      dup2(p[0],0); //redirect stdin to input of pipe
-      close(p[0]); //don't leave hanging fds
+    if (fork1() == 0){
+      close(p[1]);
+      dup2(p[0],0);
+      close(p[0]);
       runcmd(pcmd->right);
     }
-
-    wait(&r); // wait for each child to exit
-    close(0); // close the pipe
-    close(1);
+    close(p[0]);
+    close(p[1]);
+    wait(&r);
+    wait(&r);
     break;
   }
   exit(0);

@@ -6,10 +6,10 @@
 int main(){
 
   int filedes;
-  filedes = open("myfile.txt", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-  int rv;
-  rv = fork();
-  if (rv == 0){
+  filedes = open("james_sucks.txt", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+  int returnValue;
+  returnValue = fork();
+  if (returnValue == 0){
     char msg[] = "Process 1\n";
     printf("I'm the child. PID: %d\n", getpid());
     write(filedes, msg, sizeof(msg));
